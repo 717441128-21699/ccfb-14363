@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>驿站 Utility AI 行为调试台</title>
+  </head>
+  <body>
+    <div class="app">
+      <!-- 左侧：画布与顶部 HUD -->
+      <section class="stage-wrap">
+        <div class="hud">
+          <div class="hud-item">第 <b id="hudDay">1</b> 天</div>
+          <div class="hud-item">时刻 <b id="hudClock">06:00</b></div>
+          <div class="hud-item">旅客 <b id="hudNpc">0</b></div>
+          <div class="hud-item">本帧决策 <b id="hudDecisions">0</b> 次</div>
+          <div class="hud-item">决策耗时 <b id="hudDecisionMs">0.000</b> ms</div>
+          <div class="hud-item">均值 <b id="hudAvgMs">0.000</b> ms</div>
+          <div class="hud-item">3ms 预算 <span id="hudBudget" class="badge badge-ok">达标</span></div>
+          <label class="hud-item bubble-switch">
+            <input type="checkbox" id="bubbleToggle" checked /> 头顶气泡
+          </label>
+        </div>
+        <canvas id="stage"></canvas>
+        <p class="hint">点击任意旅客查看其 Utility 打分；红圈描边 = 饥饿值 ≥85，移速已明显下降</p>
+      </section>
+
+      <!-- 右侧：调试面板 -->
+      <aside class="panel">
+        <div class="panel-section">
+          <h2>模拟控制</h2>
+          <div class="controls">
+            <button id="btnPause" class="btn">⏸ 暂停</button>
+            <div id="speedGroup" class="btn-group">
+              <button data-speed="1" class="active">1×</button>
+              <button data-speed="4">4×</button>
+              <button data-speed="8">8×</button>
+              <button data-speed="20">20×</button>
+            </div>
+            <button id="btnReset" class="btn">🔄 常规 45 人</button>
+            <button id="btnStress" class="btn btn-stress">💪 压测 2000 人</button>
+          </div>
+        </div>
+
+        <div class="panel-section">
+          <h2>旅客详情</h2>
+          <p id="npcEmpty" class="empty-tip">在左侧画布点选一个旅客…</p>
+          <div id="npcDetail" hidden>
+            <div class="npc-head">
+              <span id="npcName" class="npc-name"></span>
+              <span id="npcMoney" class="npc-money"></span>
+            </div>
+            <div id="npcState" class="npc-state"></div>
+            <div id="npcTraits" class="npc-traits"></div>
+
+            <h3>需求（压力值 0~100）</h3>
+            <div id="needBars" class="need-bars"></div>
+
+            <h3>候选行动打分明细</h3>
+            <div id="decisionReason" class="decision-reason"></div>
+            <div id="scoreTable" class="score-table"></div>
+
+            <h3>决策记录</h3>
+            <div id="logInfo" class="log-info"></div>
+            <div class="controls">
+              <button id="btnExportCsv" class="btn btn-small">导出 CSV</button>
+              <button id="btnExportJson" class="btn btn-small">导出 JSON</button>
+              <button id="btnClearLog" class="btn btn-small">清空记录</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel-section">
+          <h2>打分曲线编辑</h2>
+          <div class="curve-controls">
+            <select id="curveSelect"></select>
+            <button id="btnCurveReset" class="btn btn-small">恢复默认</button>
+            <button id="btnCurveExport" class="btn btn-small">导出曲线</button>
+            <button id="btnCurveImport" class="btn btn-small">导入曲线</button>
+            <input type="file" id="curveFile" accept="application/json" hidden />
+          </div>
+          <canvas id="curveCanvas" class="curve-canvas"></canvas>
+        </div>
+      </aside>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
